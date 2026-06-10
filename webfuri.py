@@ -44,6 +44,7 @@ MIN_WITHDRAW = 10000
 WITHDRAW_FEE = 2500
 FREE_WITHDRAW_LIMIT = 5
 
+os.makedirs('instance', exist_ok=True)
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['DEMO_FOLDER'], exist_ok=True)
 os.makedirs(app.config['THUMBNAIL_FOLDER'], exist_ok=True)
