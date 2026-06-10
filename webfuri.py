@@ -20,7 +20,7 @@ except ImportError:
     PIL_AVAILABLE = False
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'FuriWeb2006@SecretKey2026'
+app.config['SECRET_KEY'] = 'FuriWeb_SecretKey_Pro'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///datafuri.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'uploads'
