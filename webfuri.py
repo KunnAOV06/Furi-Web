@@ -9,6 +9,8 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.utils import secure_filename
 import bcrypt
 
+PORT = int(os.environ.get('PORT', 5000))
+
 VIETNAM_TZ = pytz.timezone('Asia/Ho_Chi_Minh')
 
 try:
