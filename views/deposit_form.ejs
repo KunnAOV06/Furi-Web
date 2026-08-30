@@ -1,0 +1,130 @@
+<%- include('base', { title: 'Nạp tiền' }) %>
+
+<div class="fade-up" style="max-width: 600px; margin: 0 auto;">
+    <div class="card" style="padding: 1.5rem;">
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <div style="background: linear-gradient(135deg, #ff1744, #2979ff); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                <i class="fas fa-qrcode" style="font-size: 1.8rem; color: white;"></i>
+            </div>
+            <h2 style="margin: 0; font-size: 1.5rem;">Nạp tiền VietQR</h2>
+            <p class="text-muted" style="margin: 0.3rem 0 0; font-size: 0.75rem;">Nạp tiền nhanh chóng, an toàn, bảo mật</p>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary)); padding: 1rem; border-radius: 16px; text-align: center; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+            <p class="text-muted" style="margin-bottom: 0.3rem; font-size: 0.75rem;"><i class="fas fa-wallet"></i> Số dư hiện tại</p>
+            <p class="price" style="font-size: 1.8rem; margin: 0; color: var(--neon-green);"><%= formatPrice(user.balance) %></p>
+        </div>
+        
+        <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 16px; margin-bottom: 1rem; border: 1px solid var(--border-color); text-align: center;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <i class="fas fa-key" style="color: var(--neon-red); font-size: 0.9rem;"></i>
+                <strong style="font-size: 0.85rem;">Mã nạp tiền riêng của bạn</strong>
+            </div>
+            <div style="background: var(--bg-primary); padding: 0.5rem; border-radius: 10px; margin: 0.5rem 0;">
+                <code style="font-size: 1.1rem; color: var(--neon-cyan); font-weight: 700;"><%= user.deposit_code %></code>
+            </div>
+            <div class="text-muted" style="font-size: 0.7rem; margin-top: 0.3rem;">
+                <i class="fas fa-info-circle"></i> Dùng mã này làm nội dung chuyển khoản
+            </div>
+        </div>
+        
+        <form method="POST" action="/deposit/create">
+            <div style="margin-bottom: 1rem;">
+                <label style="font-size: 0.8rem; margin-bottom: 0.4rem;"><i class="fas fa-money-bill-wave"></i> Số tiền nạp (VNĐ)</label>
+                <input type="number" name="amount" step="10000" min="10000" placeholder="Nhập số tiền" required 
+                       style="width: 100%; padding: 0.8rem; font-size: 1rem; text-align: center; font-weight: 600;">
+                <div class="text-muted" style="font-size: 0.65rem; margin-top: 0.3rem;">
+                    <i class="fas fa-exclamation-circle"></i> Tối thiểu 10,000đ, bội số của 10,000đ
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; justify-content: center;">
+                <button type="button" onclick="setAmount(50000)" class="btn btn-outline btn-sm">50,000đ</button>
+                <button type="button" onclick="setAmount(100000)" class="btn btn-outline btn-sm">100,000đ</button>
+                <button type="button" onclick="setAmount(200000)" class="btn btn-outline btn-sm">200,000đ</button>
+                <button type="button" onclick="setAmount(500000)" class="btn btn-outline btn-sm">500,000đ</button>
+                <button type="button" onclick="setAmount(1000000)" class="btn btn-outline btn-sm">1,000,000đ</button>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.8rem; font-size: 1rem; margin-top: 0.5rem;">
+                <i class="fas fa-qrcode"></i> Tạo mã VietQR
+            </button>
+        </form>
+        
+        <div style="margin-top: 1rem; padding: 0.8rem; background: var(--bg-secondary); border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <i class="fas fa-lightbulb" style="color: var(--neon-yellow);"></i>
+                <strong style="font-size: 0.8rem;">Hướng dẫn nạp tiền</strong>
+            </div>
+            <ol style="margin-left: 1rem; font-size: 0.7rem; color: var(--text-muted); line-height: 1.8;">
+                <li>Nhập số tiền muốn nạp</li>
+                <li>Nhấn "Tạo mã VietQR"</li>
+                <li>Quét mã QR bằng app ngân hàng</li>
+                <li>Chuyển khoản đúng số tiền và nội dung</li>
+                <li>Chờ admin xác nhận (trong vòng 24h)</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<!-- Deposit History -->
+<div class="fade-up" style="margin-top: 1.5rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-history" style="color: var(--neon-blue);"></i>
+                <h3 style="margin: 0; font-size: 1.1rem;">Lịch sử nạp tiền</h3>
+            </div>
+            <div style="background: var(--bg-primary); padding: 0.3rem 0.6rem; border-radius: 50px;">
+                <i class="fas fa-chart-line"></i>
+                <span style="font-size: 0.7rem;">Tổng nạp: <strong><%= deposits.reduce((sum, d) => sum + d.amount, 0) %></strong></span>
+            </div>
+        </div>
+        
+        <% if (deposits && deposits.length > 0) { %>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: var(--bg-primary); border-bottom: 1px solid var(--border-color);">
+                            <th style="padding: 0.6rem 0.5rem; text-align: left;">Mã GD</th>
+                            <th style="padding: 0.6rem 0.5rem; text-align: right;">Số tiền</th>
+                            <th style="padding: 0.6rem 0.5rem; text-align: center;">Trạng thái</th>
+                            <th style="padding: 0.6rem 0.5rem; text-align: center;">Thời gian</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% deposits.slice(0, 10).forEach(function(d) { %>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 0.6rem 0.5rem;">
+                                <span style="background: var(--bg-primary); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.7rem;"><%= d.transaction_code.substring(0, 12) %>...</span>
+                            </td>
+                            <td style="padding: 0.6rem 0.5rem; text-align: right;">
+                                <span style="font-weight: 600; color: var(--neon-green);"><%= formatPrice(d.amount) %></span>
+                            </td>
+                            <td style="padding: 0.6rem 0.5rem; text-align: center;">
+                                <% if (d.status === 'pending') { %>
+                                    <span class="badge badge-yellow"><i class="fas fa-clock"></i> Chờ duyệt</span>
+                                <% } else if (d.status === 'confirmed') { %>
+                                    <span class="badge badge-blue"><i class="fas fa-check-circle"></i> Chờ duyệt</span>
+                                <% } else if (d.status === 'completed') { %>
+                                    <span class="badge badge-green"><i class="fas fa-check-circle"></i> Thành công</span>
+                                <% } else { %>
+                                    <span class="badge badge-red"><i class="fas fa-ban"></i> Đã hủy</span>
+                                <% } %>
+                            </td>
+                            <td style="padding: 0.6rem 0.5rem; text-align: center;">
+                                <span style="font-size: 0.7rem;"><%= new Date(d.created_at).toLocaleDateString('vi-VN') %></span>
+                            </td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        <% } else { %>
+            <div style="text-align: center; padding: 1.5rem;">
+                <i class="fas fa-receipt" style="font-size: 2rem; color: var(--text-muted);"></i>
+                <p class="text-muted" style="margin-top: 0.5rem;">Chưa có lịch sử nạp tiền</p>
+            </div>
+        <% } %>
+    </div>
+</div>

@@ -1,0 +1,146 @@
+<%- include('base', { title: 'Mã giảm giá' }) %>
+
+<div class="fade-up" style="margin-bottom: 2rem;">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        <div style="width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(135deg, #ffea00, #ff9100); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 40px rgba(255,234,0,0.15);">
+            <i class="fas fa-tags" style="font-size: 1.8rem; color: #1a1a1a;"></i>
+        </div>
+        <div>
+            <h1 style="font-size: 1.6rem; font-weight: 800; margin: 0;">
+                <span class="text-gradient" style="background: linear-gradient(135deg, #ffea00, #ff9100); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    Mã giảm giá
+                </span>
+            </h1>
+            <p class="text-muted" style="font-size: 0.85rem; margin: 0.2rem 0 0;">
+                <i class="fas fa-tag" style="color: var(--neon-yellow);"></i> 
+                Tạo và quản lý mã khuyến mãi
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Add Discount Form -->
+<div class="fade-up" style="background: var(--bg-card); border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.04); box-shadow: var(--shadow-premium); overflow: hidden; margin-bottom: 1.5rem;">
+    <div style="background: linear-gradient(135deg, rgba(255,234,0,0.04), rgba(255,145,0,0.04)); padding: 1rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.04);">
+        <div style="display: flex; align-items: center; gap: 0.8rem;">
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #ffea00, #ff9100); display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-plus" style="color: #1a1a1a; font-size: 0.9rem;"></i>
+            </div>
+            <h3 style="font-size: 1rem; font-weight: 700; margin: 0; color: var(--text-primary);">Tạo mã giảm giá mới</h3>
+        </div>
+    </div>
+    
+    <form method="POST" action="/admin/discounts/add" style="padding: 1.5rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
+            <div>
+                <label style="font-weight: 600; color: var(--text-secondary); font-size: 0.8rem; display: block; margin-bottom: 0.3rem;">
+                    <i class="fas fa-hashtag" style="color: var(--neon-yellow);"></i> Mã giảm giá <span style="color: var(--neon-red);">*</span>
+                </label>
+                <input type="text" name="code" placeholder="VD: SALE20" required
+                       style="width: 100%; padding: 0.7rem 1rem; background: var(--bg-primary); border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 0.9rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">
+            </div>
+            <div>
+                <label style="font-weight: 600; color: var(--text-secondary); font-size: 0.8rem; display: block; margin-bottom: 0.3rem;">
+                    <i class="fas fa-percent" style="color: var(--neon-green);"></i> Phần trăm <span style="color: var(--neon-red);">*</span>
+                </label>
+                <input type="number" name="percent" step="1" placeholder="VD: 20" required
+                       style="width: 100%; padding: 0.7rem 1rem; background: var(--bg-primary); border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 0.9rem;">
+            </div>
+            <div>
+                <label style="font-weight: 600; color: var(--text-secondary); font-size: 0.8rem; display: block; margin-bottom: 0.3rem;">
+                    <i class="fas fa-calendar" style="color: var(--neon-cyan);"></i> Số ngày hiệu lực <span style="color: var(--neon-red);">*</span>
+                </label>
+                <input type="number" name="days_valid" placeholder="VD: 30" required
+                       style="width: 100%; padding: 0.7rem 1rem; background: var(--bg-primary); border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 0.9rem;">
+            </div>
+            <div>
+                <label style="font-weight: 600; color: var(--text-secondary); font-size: 0.8rem; display: block; margin-bottom: 0.3rem;">
+                    <i class="fas fa-users" style="color: var(--neon-blue);"></i> Số lần sử dụng
+                </label>
+                <input type="number" name="max_uses" placeholder="VD: 100" value="1"
+                       style="width: 100%; padding: 0.7rem 1rem; background: var(--bg-primary); border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 0.9rem;">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-gold" style="width: 100%; margin-top: 1rem; padding: 0.8rem; font-size: 0.95rem; border-radius: var(--radius-sm);">
+            <i class="fas fa-plus-circle"></i> Tạo mã giảm giá
+        </button>
+    </form>
+</div>
+
+<!-- Discount List -->
+<div class="fade-up" style="background: var(--bg-card); border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.04); box-shadow: var(--shadow-premium); overflow: hidden;">
+    <div style="padding: 1rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem;">
+        <div style="display: flex; align-items: center; gap: 0.8rem;">
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(41,121,255,0.12); display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-list" style="color: var(--neon-blue); font-size: 0.9rem;"></i>
+            </div>
+            <h3 style="font-size: 1rem; font-weight: 700; margin: 0; color: var(--text-primary);">Danh sách mã giảm giá</h3>
+        </div>
+        <span class="badge badge-yellow" style="font-size: 0.5rem; padding: 0.1rem 0.6rem;"><i class="fas fa-tag"></i> <%= discounts.length %></span>
+    </div>
+    
+    <% if (discounts && discounts.length > 0) { %>
+        <div style="padding: 1rem 1.5rem; overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; min-width: 500px;">
+                <thead>
+                    <tr style="background: var(--bg-primary); border-bottom: 2px solid rgba(255,234,0,0.1);">
+                        <th style="padding: 0.8rem 0.6rem; text-align: left;">Mã</th>
+                        <th style="padding: 0.8rem 0.6rem; text-align: center;">Giảm</th>
+                        <th style="padding: 0.8rem 0.6rem; text-align: center;">Hết hạn</th>
+                        <th style="padding: 0.8rem 0.6rem; text-align: center;">Đã dùng</th>
+                        <th style="padding: 0.8rem 0.6rem; text-align: center;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% discounts.forEach(function(d) { %>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                        <td style="padding: 0.8rem 0.6rem;">
+                            <div style="display: inline-block; padding: 0.2rem 0.6rem; background: rgba(255,234,0,0.08); border-radius: 6px; border: 1px solid rgba(255,234,0,0.1);">
+                                <code style="color: var(--neon-yellow); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.5px;"><%= d.code %></code>
+                            </div>
+                        </td>
+                        <td style="padding: 0.8rem 0.6rem; text-align: center;">
+                            <span style="background: rgba(0,230,118,0.12); color: var(--neon-green); padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
+                                <i class="fas fa-percent"></i> <%= d.discount_percent %>% 
+                            </span>
+                        </td>
+                        <td style="padding: 0.8rem 0.6rem; text-align: center;">
+                            <% if (new Date(d.valid_until) > new Date()) { %>
+                                <span style="color: var(--neon-cyan); font-size: 0.8rem;">
+                                    <i class="fas fa-calendar"></i> <%= new Date(d.valid_until).toLocaleDateString('vi-VN') %>
+                                </span>
+                            <% } else { %>
+                                <span style="color: var(--neon-red); font-size: 0.8rem;">
+                                    <i class="fas fa-exclamation-circle"></i> Hết hạn
+                                </span>
+                            <% } %>
+                        </td>
+                        <td style="padding: 0.8rem 0.6rem; text-align: center;">
+                            <div style="display: inline-block; padding: 0.2rem 0.8rem; background: var(--bg-primary); border-radius: 20px;">
+                                <span style="font-weight: 700; color: var(--text-primary); font-size: 0.8rem;"><%= d.used_count %></span>
+                                <span class="text-muted" style="font-size: 0.65rem;">/ <%= d.max_uses %></span>
+                            </div>
+                        </td>
+                        <td style="padding: 0.8rem 0.6rem; text-align: center;">
+                            <form method="POST" action="/admin/discounts/<%= d.id %>/delete" style="display: inline;" 
+                                  onsubmit="return confirm('Xóa mã giảm giá <%= d.code %>?')">
+                                <button type="submit" class="btn btn-danger btn-sm" style="padding: 0.3rem 0.8rem; font-size: 0.7rem;">
+                                    <i class="fas fa-trash"></i> Xóa
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    <% } else { %>
+        <div style="text-align: center; padding: 2rem;">
+            <div style="width: 70px; height: 70px; margin: 0 auto 1rem; border-radius: 50%; background: rgba(255,234,0,0.06); display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,234,0,0.08);">
+                <i class="fas fa-tags" style="font-size: 2rem; color: rgba(255,234,0,0.3);"></i>
+            </div>
+            <h4 style="color: var(--text-secondary);">Chưa có mã giảm giá nào</h4>
+            <p class="text-muted" style="font-size: 0.85rem;">Hãy tạo mã giảm giá đầu tiên!</p>
+        </div>
+    <% } %>
+</div>

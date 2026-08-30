@@ -1,0 +1,174 @@
+<%- include('base', { title: 'FURI WEB - Premium Mod Store' }) %>
+
+<!-- Hero Section -->
+<section class="fade-up" style="position: relative; padding: 1.5rem 1rem; border-radius: var(--radius); overflow: hidden; margin-bottom: 1.5rem; background: var(--bg-card); border: 1px solid rgba(255,255,255,0.04);">
+    <div style="position: absolute; top: -50%; right: -20%; width: 60%; height: 200%; background: radial-gradient(ellipse, rgba(255,23,68,0.06), transparent 70%); pointer-events: none;"></div>
+    <div style="position: absolute; bottom: -50%; left: -20%; width: 50%; height: 150%; background: radial-gradient(ellipse, rgba(41,121,255,0.04), transparent 70%); pointer-events: none;"></div>
+    
+    <div style="position: relative; z-index: 1; text-align: center;">
+        <div style="display: inline-block; padding: 0.2rem 1rem; background: var(--gradient-glow); border-radius: 50px; margin-bottom: 0.6rem; border: 1px solid rgba(255,23,68,0.08);">
+            <span style="color: var(--neon-cyan); font-weight: 700; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 2px;">
+                <i class="fas fa-skull"></i> FURI EDIT XINH ĐẸP
+            </span>
+        </div>
+        
+        <h1 style="font-size: clamp(1.6rem, 6vw, 2.8rem); font-weight: 900; margin: 0 0 0.2rem; line-height: 1.1;">
+            <span style="background: linear-gradient(135deg, #ff1744, #2979ff, #00e5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: inline-block;">
+                SYSTEM VERSION 4.0
+            </span>
+        </h1>
+        
+        <p style="color: var(--text-secondary); font-size: clamp(0.8rem, 2vw, 0.95rem); max-width: 400px; margin: 0 auto 1rem;">
+            <i class="fas fa-shield-alt" style="color: var(--neon-green); font-size: 0.7rem;"></i> 
+            Nền tảng mod game hàng đầu — Tải xuống an toàn, bảo mật tuyệt đối
+        </p>
+        
+        <div style="max-width: 100%; margin: 0 auto;">
+            <div style="display: flex; gap: 0.4rem; background: var(--bg-secondary); border-radius: var(--radius-full); padding: 0.2rem; border: 1px solid rgba(255,255,255,0.04);">
+                <div style="display: flex; align-items: center; padding-left: 0.8rem;">
+                    <i class="fas fa-search" style="color: var(--text-muted); font-size: 0.75rem;"></i>
+                </div>
+                <input type="text" id="searchInput" placeholder="Tìm kiếm mod, tool..." 
+                       style="flex: 1; background: none; border: none; padding: 0.5rem 0.3rem; color: var(--text-primary); font-size: 0.8rem; outline: none; min-width: 60px;">
+                <button onclick="searchProducts()" class="btn btn-primary" style="border-radius: var(--radius-full); padding: 0.35rem 1.2rem; font-size: 0.75rem; white-space: nowrap; flex-shrink: 0;">
+                    <i class="fas fa-search"></i> Tìm
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Category Menu -->
+<section class="fade-up" style="margin-bottom: 1.5rem;">
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem;">
+        <a href="/mod-nut" style="text-decoration: none; color: inherit;">
+            <div class="category-card" style="background: var(--bg-card); border-radius: var(--radius-sm); padding: 1rem 0.6rem; text-align: center; border: 1px solid rgba(255,255,255,0.04); transition: var(--transition); position: relative; overflow: hidden;"
+                 onmouseenter="this.style.borderColor='var(--neon-red)'; this.style.transform='translateY(-3px)'; this.style.boxShadow='var(--shadow-card)'"
+                 onmouseleave="this.style.borderColor='rgba(255,255,255,0.04)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                <div style="position: absolute; top: -50%; right: -50%; width: 100%; height: 200%; background: radial-gradient(ellipse, rgba(255,23,68,0.06), transparent 70%); pointer-events: none;"></div>
+                <div style="position: relative; z-index: 1;">
+                    <div style="width: 48px; height: 48px; margin: 0 auto 0.4rem; border-radius: 12px; background: rgba(255,23,68,0.1); display: flex; align-items: center; justify-content: center; border: 1.5px solid rgba(255,23,68,0.15);">
+                        <i class="fas fa-gamepad" style="font-size: 1.4rem; color: var(--neon-red);"></i>
+                    </div>
+                    <h4 style="font-size: 0.8rem; font-weight: 700; color: var(--neon-red); margin: 0;">MOD NÚT</h4>
+                    <p style="font-size: 0.6rem; color: var(--text-muted); margin: 0.1rem 0 0;">Mod FX, Joystick, Icon</p>
+                    <span class="badge badge-red" style="font-size: 0.45rem; padding: 0.1rem 0.5rem; margin-top: 0.2rem;">Hot</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="/mod-trang-phuc" style="text-decoration: none; color: inherit;">
+            <div class="category-card" style="background: var(--bg-card); border-radius: var(--radius-sm); padding: 1rem 0.6rem; text-align: center; border: 1px solid rgba(255,255,255,0.04); transition: var(--transition); position: relative; overflow: hidden;"
+                 onmouseenter="this.style.borderColor='var(--neon-blue)'; this.style.transform='translateY(-3px)'; this.style.boxShadow='var(--shadow-card)'"
+                 onmouseleave="this.style.borderColor='rgba(255,255,255,0.04)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                <div style="position: absolute; top: -50%; right: -50%; width: 100%; height: 200%; background: radial-gradient(ellipse, rgba(41,121,255,0.06), transparent 70%); pointer-events: none;"></div>
+                <div style="position: relative; z-index: 1;">
+                    <div style="width: 48px; height: 48px; margin: 0 auto 0.4rem; border-radius: 12px; background: rgba(41,121,255,0.1); display: flex; align-items: center; justify-content: center; border: 1.5px solid rgba(41,121,255,0.15);">
+                        <i class="fas fa-tshirt" style="font-size: 1.4rem; color: var(--neon-blue);"></i>
+                    </div>
+                    <h4 style="font-size: 0.8rem; font-weight: 700; color: var(--neon-blue); margin: 0;">MOD TRANG PHỤC</h4>
+                    <p style="font-size: 0.6rem; color: var(--text-muted); margin: 0.1rem 0 0;">Kho Skin đa dạng</p>
+                    <span class="badge badge-blue" style="font-size: 0.45rem; padding: 0.1rem 0.5rem; margin-top: 0.2rem;">Premium</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="/tool-aov" style="text-decoration: none; color: inherit;">
+            <div class="category-card" style="background: var(--bg-card); border-radius: var(--radius-sm); padding: 1rem 0.6rem; text-align: center; border: 1px solid rgba(255,255,255,0.04); transition: var(--transition); position: relative; overflow: hidden;"
+                 onmouseenter="this.style.borderColor='var(--neon-green)'; this.style.transform='translateY(-3px)'; this.style.boxShadow='var(--shadow-card)'"
+                 onmouseleave="this.style.borderColor='rgba(255,255,255,0.04)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                <div style="position: absolute; top: -50%; right: -50%; width: 100%; height: 200%; background: radial-gradient(ellipse, rgba(0,230,118,0.06), transparent 70%); pointer-events: none;"></div>
+                <div style="position: relative; z-index: 1;">
+                    <div style="width: 48px; height: 48px; margin: 0 auto 0.4rem; border-radius: 12px; background: rgba(0,230,118,0.1); display: flex; align-items: center; justify-content: center; border: 1.5px solid rgba(0,230,118,0.15);">
+                        <i class="fas fa-tools" style="font-size: 1.4rem; color: var(--neon-green);"></i>
+                    </div>
+                    <h4 style="font-size: 0.8rem; font-weight: 700; color: var(--neon-green); margin: 0;">TOOL AOV</h4>
+                    <p style="font-size: 0.6rem; color: var(--text-muted); margin: 0.1rem 0 0;">Công cụ hỗ trợ</p>
+                    <span class="badge badge-green" style="font-size: 0.45rem; padding: 0.1rem 0.5rem; margin-top: 0.2rem;">New</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="/mod-thong-bao" style="text-decoration: none; color: inherit;">
+            <div class="category-card" style="background: var(--bg-card); border-radius: var(--radius-sm); padding: 1rem 0.6rem; text-align: center; border: 1px solid rgba(255,255,255,0.04); transition: var(--transition); position: relative; overflow: hidden;"
+                 onmouseenter="this.style.borderColor='var(--neon-cyan)'; this.style.transform='translateY(-3px)'; this.style.boxShadow='var(--shadow-card)'"
+                 onmouseleave="this.style.borderColor='rgba(255,255,255,0.04)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                <div style="position: absolute; top: -50%; right: -50%; width: 100%; height: 200%; background: radial-gradient(ellipse, rgba(0,229,255,0.06), transparent 70%); pointer-events: none;"></div>
+                <div style="position: relative; z-index: 1;">
+                    <div style="width: 48px; height: 48px; margin: 0 auto 0.4rem; border-radius: 12px; background: rgba(0,229,255,0.1); display: flex; align-items: center; justify-content: center; border: 1.5px solid rgba(0,229,255,0.15);">
+                        <i class="fas fa-bell" style="font-size: 1.4rem; color: var(--neon-cyan);"></i>
+                    </div>
+                    <h4 style="font-size: 0.8rem; font-weight: 700; color: var(--neon-cyan); margin: 0;">MOD THÔNG BÁO</h4>
+                    <p style="font-size: 0.6rem; color: var(--text-muted); margin: 0.1rem 0 0;">Hiệu ứng hạ gục</p>
+                    <span class="badge badge-cyan" style="font-size: 0.45rem; padding: 0.1rem 0.5rem; margin-top: 0.2rem;">Trending</span>
+                </div>
+            </div>
+        </a>
+    </div>
+</section>
+
+<!-- Hot Products -->
+<section class="fade-up">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+        <div>
+            <h2 style="font-size: 1.1rem; font-weight: 800; margin: 0;">
+                <span class="text-gradient">🔥 Sản phẩm hot</span>
+            </h2>
+            <p class="text-muted" style="font-size: 0.65rem; margin: 0.1rem 0 0;">Những mod được tải nhiều nhất</p>
+        </div>
+        <span class="badge badge-red" style="font-size: 0.5rem; padding: 0.1rem 0.5rem;"><i class="fas fa-fire"></i> Hot</span>
+    </div>
+    
+    <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+        <% if (hotFiles && hotFiles.length > 0) { %>
+            <% hotFiles.forEach(function(file) { %>
+            <div class="card-glow" style="padding: 0.7rem 0.8rem; cursor: pointer;" 
+                 onclick="window.location.href='/file/<%= file.id %>'">
+                <div style="display: flex; gap: 0.8rem; align-items: center;">
+                    <div style="width: 50px; height: 50px; border-radius: 10px; overflow: hidden; flex-shrink: 0; background: var(--bg-secondary); border: 1px solid var(--border-color);">
+                        <% if (file.thumbnail) { %>
+                            <img src="/file/thumbnail/<%= file.thumbnail %>" style="width: 100%; height: 100%; object-fit: cover;">
+                        <% } else { %>
+                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(255,23,68,0.1), rgba(41,121,255,0.1));">
+                                <i class="fas fa-file" style="color: var(--text-muted); font-size: 1rem;"></i>
+                            </div>
+                        <% } %>
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <h3 style="font-size: 0.8rem; font-weight: 600; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <%= file.product_name %>
+                        </h3>
+                        <div style="display: flex; gap: 0.4rem; align-items: center; margin-top: 0.1rem; flex-wrap: wrap;">
+                            <span class="price" style="font-size: 0.8rem;"><%= formatPrice(file.price) %></span>
+                            <span class="text-muted" style="font-size: 0.5rem;">
+                                <i class="fas fa-download"></i> <%= file.download_count || 0 %>
+                            </span>
+                            <% if (file.has_demo) { %>
+                                <span class="badge badge-cyan" style="font-size: 0.4rem; padding: 0.05rem 0.3rem;"><i class="fas fa-play"></i> Demo</span>
+                            <% } %>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right" style="color: var(--text-muted); font-size: 0.7rem;"></i>
+                </div>
+            </div>
+            <% }); %>
+        <% } else { %>
+            <div style="text-align: center; padding: 2rem 1rem; background: var(--bg-card); border-radius: var(--radius-sm);">
+                <i class="fas fa-store" style="font-size: 2rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem;"></i>
+                <p class="text-muted" style="font-size: 0.8rem;">Chưa có sản phẩm nào</p>
+            </div>
+        <% } %>
+    </div>
+</section>
+
+<script>
+    function searchProducts() {
+        const term = document.getElementById('searchInput').value.trim();
+        if (term) {
+            window.location.href = '/?search=' + encodeURIComponent(term);
+        }
+    }
+    document.getElementById('searchInput').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') searchProducts();
+    });
+</script>

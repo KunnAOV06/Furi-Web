@@ -1,0 +1,143 @@
+<%- include('base', { title: 'Rút tiền' }) %>
+
+<div class="fade-up" style="max-width: 600px; margin: 0 auto;">
+    <div class="card" style="padding: 1.5rem;">
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <div style="background: linear-gradient(135deg, #10b981, #059669); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                <i class="fas fa-money-bill-wave" style="font-size: 1.8rem; color: white;"></i>
+            </div>
+            <h2 style="margin: 0; font-size: 1.5rem;">Rút tiền</h2>
+            <p class="text-muted" style="margin: 0.3rem 0 0; font-size: 0.75rem;">Rút tiền về tài khoản ngân hàng</p>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary)); padding: 1rem; border-radius: 16px; text-align: center; margin-bottom: 1rem; border: 1px solid var(--neon-green);">
+            <p class="text-muted" style="margin-bottom: 0.3rem; font-size: 0.75rem;"><i class="fas fa-wallet"></i> Số dư khả dụng</p>
+            <p class="price" style="font-size: 1.8rem; margin: 0; color: var(--neon-green);"><%= formatPrice(user.balance) %></p>
+        </div>
+        
+        <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px; margin-bottom: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <i class="fas fa-info-circle" style="color: var(--neon-blue);"></i>
+                <strong style="font-size: 0.85rem;">Thông tin rút tiền</strong>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.75rem;">
+                <div>💰 Tối thiểu: <strong><%= formatPrice(minWithdraw) %></strong></div>
+                <div>🎁 Miễn phí: <strong><%= freeLimit %> lần đầu</strong></div>
+                <div>💸 Phí rút: <strong><%= formatPrice(fee) %>/lần</strong></div>
+                <div>📊 Đã rút: <strong><%= user.withdraw_count || 0 %> lần</strong></div>
+            </div>
+            <% if (fee > 0) { %>
+                <div style="margin-top: 0.5rem; background: rgba(255,23,68,0.1); padding: 0.3rem; border-radius: 8px; text-align: center;">
+                    <span style="color: var(--neon-yellow); font-size: 0.7rem;">
+                        <i class="fas fa-exclamation-triangle"></i> Lần rút này sẽ mất phí <%= formatPrice(fee) %>
+                    </span>
+                </div>
+            <% } %>
+        </div>
+        
+        <form method="POST" action="/withdraw">
+            <div style="margin-bottom: 1rem;">
+                <label style="font-size: 0.8rem; margin-bottom: 0.4rem;"><i class="fas fa-money-bill-wave"></i> Số tiền cần rút (VNĐ)</label>
+                <input type="number" name="amount" step="10000" min="<%= minWithdraw %>" placeholder="Nhập số tiền" required 
+                       style="width: 100%; padding: 0.8rem; font-size: 1rem; text-align: center; font-weight: 600;">
+            </div>
+            
+            <div style="margin-bottom: 1rem;">
+                <label style="font-size: 0.8rem; margin-bottom: 0.4rem;"><i class="fas fa-university"></i> Ngân hàng</label>
+                <input type="text" name="bank_name" placeholder="VD: Vietcombank, Techcombank..." 
+                       value="<%= user.bank_name || '' %>" required
+                       style="width: 100%; padding: 0.8rem;">
+            </div>
+            
+            <div style="margin-bottom: 1rem;">
+                <label style="font-size: 0.8rem; margin-bottom: 0.4rem;"><i class="fas fa-user"></i> Chủ tài khoản</label>
+                <input type="text" name="bank_account_name" placeholder="Tên chủ tài khoản" 
+                       value="<%= user.bank_account_name || '' %>" required
+                       style="width: 100%; padding: 0.8rem;">
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label style="font-size: 0.8rem; margin-bottom: 0.4rem;"><i class="fas fa-hashtag"></i> Số tài khoản</label>
+                <input type="text" name="bank_account_number" placeholder="Số tài khoản" 
+                       value="<%= user.bank_account_number || '' %>" required
+                       style="width: 100%; padding: 0.8rem;">
+            </div>
+            
+            <button type="submit" class="btn btn-success" style="width: 100%; padding: 0.8rem; font-size: 1rem;" onclick="return confirm('Bạn có chắc muốn rút tiền?')">
+                <i class="fas fa-check-circle"></i> Gửi yêu cầu rút tiền
+            </button>
+        </form>
+        
+        <div style="margin-top: 1rem; padding: 0.8rem; background: rgba(255,23,68,0.05); border-radius: 10px; border-left: 3px solid var(--neon-red);">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-clock" style="color: var(--neon-yellow);"></i>
+                <span style="font-size: 0.7rem; color: var(--text-muted);">Tiền sẽ được chuyển trong vòng 24h sau khi xác nhận</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.3rem;">
+                <i class="fas fa-exclamation-triangle" style="color: var(--neon-red);"></i>
+                <span style="font-size: 0.65rem; color: var(--text-muted);">Vui lòng kiểm tra kỹ thông tin ngân hàng. Sai thông tin sẽ tự chịu trách nhiệm!</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Withdraw History -->
+<div class="fade-up" style="margin-top: 1.5rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-history" style="color: var(--neon-blue);"></i>
+                <h3 style="margin: 0; font-size: 1.1rem;">Lịch sử rút tiền</h3>
+            </div>
+            <a href="/withdraw/history" class="btn btn-primary btn-sm" style="padding: 0.3rem 0.8rem; font-size: 0.7rem;">
+                <i class="fas fa-external-link-alt"></i> Xem tất cả
+            </a>
+        </div>
+        
+        <% if (withdrawals && withdrawals.length > 0) { %>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: var(--bg-primary); border-bottom: 1px solid var(--border-color);">
+                            <th style="padding: 0.6rem 0.5rem; text-align: left;">ID</th>
+                            <th style="padding: 0.6rem 0.5rem; text-align: right;">Số tiền</th>
+                            <th style="padding: 0.6rem 0.5rem; text-align: center;">Trạng thái</th>
+                            <th style="padding: 0.6rem 0.5rem; text-align: center;">Ngày</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% withdrawals.slice(0, 5).forEach(function(w) { %>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 0.6rem 0.5rem;">
+                                <span style="background: var(--bg-primary); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.7rem;">#<%= w.id %></span>
+                            </td>
+                            <td style="padding: 0.6rem 0.5rem; text-align: right;">
+                                <span style="font-weight: 600; color: var(--neon-red);"><%= formatPrice(w.amount) %></span>
+                            </td>
+                            <td style="padding: 0.6rem 0.5rem; text-align: center;">
+                                <% if (w.status === 'pending') { %>
+                                    <span class="badge badge-yellow"><i class="fas fa-clock"></i> Chờ</span>
+                                <% } else if (w.status === 'processing') { %>
+                                    <span class="badge badge-blue"><i class="fas fa-spinner fa-pulse"></i> Xử lý</span>
+                                <% } else if (w.status === 'completed') { %>
+                                    <span class="badge badge-green"><i class="fas fa-check-circle"></i> Xong</span>
+                                <% } else { %>
+                                    <span class="badge badge-red"><i class="fas fa-ban"></i> Từ chối</span>
+                                <% } %>
+                            </td>
+                            <td style="padding: 0.6rem 0.5rem; text-align: center;">
+                                <span style="font-size: 0.7rem;"><%= new Date(w.created_at).toLocaleDateString('vi-VN') %></span>
+                            </td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        <% } else { %>
+            <div style="text-align: center; padding: 1.5rem;">
+                <i class="fas fa-receipt" style="font-size: 2rem; color: var(--text-muted);"></i>
+                <p class="text-muted" style="margin-top: 0.5rem;">Chưa có lịch sử rút tiền</p>
+            </div>
+        <% } %>
+    </div>
+</div>

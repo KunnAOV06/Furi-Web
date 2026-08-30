@@ -1,0 +1,290 @@
+<%- include('base', { title: file ? file.product_name + ' - FURI WEB' : 'Chi tiết sản phẩm' }) %>
+
+<% if (file) { %>
+
+<!-- Back Button -->
+<div class="fade-up" style="margin-bottom: 1rem;">
+    <a href="/" style="display: inline-flex; align-items: center; gap: 0.4rem; color: var(--text-muted); text-decoration: none; font-size: 0.75rem; transition: var(--transition);"
+       onmouseenter="this.style.color='var(--neon-cyan)'"
+       onmouseleave="this.style.color='var(--text-muted)'">
+        <i class="fas fa-arrow-left" style="font-size: 0.6rem;"></i> Quay lại
+    </a>
+</div>
+
+<!-- Product Card -->
+<div class="fade-up" style="background: var(--bg-card); border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.04); overflow: hidden; box-shadow: var(--shadow-card);">
+
+    <!-- PC: 2 Columns -->
+    <div class="pc-view" style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 0; align-items: stretch;">
+
+        <!-- Left: Image -->
+        <div style="position: relative; background: var(--bg-secondary); min-height: 350px;">
+            <% if (file.thumbnail) { %>
+                <img src="/file/thumbnail/<%= file.thumbnail %>" style="width: 100%; height: 100%; max-height: 450px; object-fit: cover; display: block;">
+            <% } else { %>
+                <div style="width: 100%; height: 100%; min-height: 350px; background: linear-gradient(135deg, rgba(255,23,68,0.04), rgba(41,121,255,0.04)); display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-file" style="font-size: 4rem; color: rgba(255,255,255,0.05);"></i>
+                </div>
+            <% } %>
+            
+            <div style="position: absolute; bottom: 14px; left: 14px;">
+                <span style="background: var(--neon-red); color: white; padding: 0.15rem 0.8rem; border-radius: var(--radius-full); font-size: 0.5rem; font-weight: 700; box-shadow: 0 4px 15px rgba(255,23,68,0.3);">
+                    <% if (file.category === 'mod_nut') { %>
+                        <i class="fas fa-gamepad"></i> MOD NÚT
+                    <% } else if (file.category === 'mod_trang_phuc') { %>
+                        <i class="fas fa-tshirt"></i> MOD TRANG PHỤC
+                    <% } else if (file.category === 'tool_aov') { %>
+                        <i class="fas fa-tools"></i> TOOL AOV
+                    <% } else if (file.category === 'mod_thong_bao') { %>
+                        <i class="fas fa-bell"></i> MOD THÔNG BÁO
+                    <% } else { %>
+                        <i class="fas fa-cube"></i> MOD
+                    <% } %>
+                </span>
+            </div>
+            
+            <% if (file.has_demo) { %>
+            <div style="position: absolute; top: 14px; right: 14px; background: linear-gradient(135deg, #ff1744, #ff4081); color: white; padding: 0.15rem 0.8rem; border-radius: var(--radius-full); font-size: 0.5rem; font-weight: 700; box-shadow: 0 4px 15px rgba(255,23,68,0.3);">
+                <i class="fas fa-fire"></i> HOT
+            </div>
+            <% } %>
+        </div>
+
+        <!-- Right: Info -->
+        <div style="padding: 1.8rem 2rem; display: flex; flex-direction: column; justify-content: center; gap: 0.8rem;">
+            
+            <div>
+                <h1 style="font-size: 1.4rem; font-weight: 800; margin: 0; color: var(--text-primary); line-height: 1.2;">
+                    <%= file.product_name %>
+                </h1>
+                <div style="display: flex; align-items: center; gap: 0.8rem; margin-top: 0.3rem; flex-wrap: wrap;">
+                    <span style="color: var(--text-muted); font-size: 0.7rem;">
+                        <i class="fas fa-user" style="color: var(--neon-cyan);"></i> <%= file.seller_username || 'Admin' %>
+                    </span>
+                    <span style="color: var(--text-muted); font-size: 0.7rem;">
+                        <i class="fas fa-calendar" style="color: var(--neon-yellow);"></i> <%= new Date(file.created_at).toLocaleDateString('vi-VN') %>
+                    </span>
+                    <span style="color: var(--text-muted); font-size: 0.7rem;">
+                        <i class="fas fa-file-alt" style="color: var(--neon-cyan);"></i> <%= file.file_type || 'OTHER' %>
+                    </span>
+                </div>
+            </div>
+            
+            <div style="background: var(--bg-secondary); border-radius: var(--radius-sm); padding: 0.6rem 0.8rem; border-left: 3px solid var(--neon-red);">
+                <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; margin: 0;">
+                    <%= file.description || 'Không có mô tả' %>
+                </p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; padding: 0.6rem 0; border-top: 1px solid rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.04);">
+                <div>
+                    <span class="text-muted" style="font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.5px;">Giá bán</span>
+                    <div style="font-size: 1.4rem; font-weight: 800; color: var(--neon-red);"><%= formatPrice(file.price) %></div>
+                </div>
+                <div style="text-align: right;">
+                    <span class="text-muted" style="font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.5px;">Danh mục</span>
+                    <div style="font-size: 0.85rem; font-weight: 600; color: 
+                        <% if (file.category === 'mod_nut') { %>var(--neon-red)<% } else if (file.category === 'mod_trang_phuc') { %>var(--neon-blue)<% } else if (file.category === 'tool_aov') { %>var(--neon-green)<% } else if (file.category === 'mod_thong_bao') { %>var(--neon-cyan)<% } else { %>var(--text-muted)<% } %>;">
+                        <% if (file.category === 'mod_nut') { %>
+                            <i class="fas fa-gamepad"></i> MOD NÚT
+                        <% } else if (file.category === 'mod_trang_phuc') { %>
+                            <i class="fas fa-tshirt"></i> MOD TRANG PHỤC
+                        <% } else if (file.category === 'tool_aov') { %>
+                            <i class="fas fa-tools"></i> TOOL AOV
+                        <% } else if (file.category === 'mod_thong_bao') { %>
+                            <i class="fas fa-bell"></i> MOD THÔNG BÁO
+                        <% } else { %>
+                            <i class="fas fa-cube"></i> Khác
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <% if (isPurchased) { %>
+                    <a href="/file/download/<%= file.id %>" class="btn btn-primary" style="flex: 1; padding: 0.6rem; font-size: 0.85rem; border-radius: var(--radius-sm); text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                        <i class="fas fa-download"></i> Tải xuống
+                    </a>
+                <% } else { %>
+                    <% if (file.category === 'tool_aov') { %>
+                        <form method="POST" action="/purchase/buy/<%= file.id %>" style="flex: 1;">
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.6rem; font-size: 0.85rem; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                                <i class="fas fa-shopping-cart"></i> Mua ngay
+                            </button>
+                        </form>
+                    <% } else { %>
+                        <a href="/file/get-free/<%= file.id %>" class="btn btn-success" style="flex: 1; padding: 0.6rem; font-size: 0.8rem; border-radius: var(--radius-sm); text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.4rem; font-weight: 600;">
+                            <i class="fas fa-gift"></i> 🎁 Nhận Free
+                        </a>
+                        <form method="POST" action="/purchase/buy/<%= file.id %>" style="flex: 1;">
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.6rem; font-size: 0.85rem; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; gap: 0.4rem; font-weight: 600;">
+                                <i class="fas fa-shopping-cart"></i> Mua
+                            </button>
+                        </form>
+                    <% } %>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile: 1 Column -->
+    <div class="mobile-view" style="display: none; flex-direction: column;">
+        <div style="position: relative; background: var(--bg-secondary); width: 100%;">
+            <% if (file.thumbnail) { %>
+                <img src="/file/thumbnail/<%= file.thumbnail %>" style="width: 100%; height: auto; max-height: 280px; object-fit: cover; display: block;">
+            <% } else { %>
+                <div style="width: 100%; height: 200px; background: linear-gradient(135deg, rgba(255,23,68,0.04), rgba(41,121,255,0.04)); display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-file" style="font-size: 3rem; color: rgba(255,255,255,0.05);"></i>
+                </div>
+            <% } %>
+            
+            <div style="position: absolute; bottom: 12px; left: 12px;">
+                <span style="background: var(--neon-red); color: white; padding: 0.1rem 0.6rem; border-radius: var(--radius-full); font-size: 0.45rem; font-weight: 700; box-shadow: 0 4px 15px rgba(255,23,68,0.3);">
+                    <% if (file.category === 'mod_nut') { %>
+                        <i class="fas fa-gamepad"></i> MOD NÚT
+                    <% } else if (file.category === 'mod_trang_phuc') { %>
+                        <i class="fas fa-tshirt"></i> MOD TRANG PHỤC
+                    <% } else if (file.category === 'tool_aov') { %>
+                        <i class="fas fa-tools"></i> TOOL AOV
+                    <% } else if (file.category === 'mod_thong_bao') { %>
+                        <i class="fas fa-bell"></i> MOD THÔNG BÁO
+                    <% } else { %>
+                        <i class="fas fa-cube"></i> MOD
+                    <% } %>
+                </span>
+            </div>
+            
+            <% if (file.has_demo) { %>
+            <div style="position: absolute; top: 12px; right: 12px; background: linear-gradient(135deg, #ff1744, #ff4081); color: white; padding: 0.1rem 0.6rem; border-radius: var(--radius-full); font-size: 0.45rem; font-weight: 700; box-shadow: 0 4px 15px rgba(255,23,68,0.3);">
+                <i class="fas fa-fire"></i> HOT
+            </div>
+            <% } %>
+        </div>
+        
+        <div style="padding: 1rem 1.2rem 1.2rem;">
+            <div>
+                <h1 style="font-size: 1.1rem; font-weight: 700; margin: 0; color: var(--text-primary);">
+                    <%= file.product_name %>
+                </h1>
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.2rem; flex-wrap: wrap;">
+                    <span style="color: var(--text-muted); font-size: 0.6rem;">
+                        <i class="fas fa-user" style="color: var(--neon-cyan);"></i> <%= file.seller_username || 'Admin' %>
+                    </span>
+                    <span style="color: var(--text-muted); font-size: 0.6rem;">
+                        <i class="fas fa-calendar" style="color: var(--neon-yellow);"></i> <%= new Date(file.created_at).toLocaleDateString('vi-VN') %>
+                    </span>
+                    <span style="color: var(--text-muted); font-size: 0.6rem;">
+                        <i class="fas fa-file-alt" style="color: var(--neon-cyan);"></i> <%= file.file_type || 'OTHER' %>
+                    </span>
+                </div>
+            </div>
+            
+            <div style="margin-top: 0.4rem; border-left: 2px solid var(--neon-red); padding-left: 0.6rem;">
+                <p style="color: var(--text-secondary); font-size: 0.75rem; line-height: 1.4; margin: 0;">
+                    <%= file.description || 'Không có mô tả' %>
+                </p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid rgba(255,255,255,0.04);">
+                <div>
+                    <span class="text-muted" style="font-size: 0.45rem; text-transform: uppercase; letter-spacing: 0.3px;">Giá bán</span>
+                    <div style="font-size: 1.1rem; font-weight: 800; color: var(--neon-red);"><%= formatPrice(file.price) %></div>
+                </div>
+                <div style="text-align: right;">
+                    <span class="text-muted" style="font-size: 0.45rem; text-transform: uppercase; letter-spacing: 0.3px;">Danh mục</span>
+                    <div style="font-size: 0.7rem; font-weight: 600; color: 
+                        <% if (file.category === 'mod_nut') { %>var(--neon-red)<% } else if (file.category === 'mod_trang_phuc') { %>var(--neon-blue)<% } else if (file.category === 'tool_aov') { %>var(--neon-green)<% } else if (file.category === 'mod_thong_bao') { %>var(--neon-cyan)<% } else { %>var(--text-muted)<% } %>;">
+                        <% if (file.category === 'mod_nut') { %>
+                            <i class="fas fa-gamepad"></i> MOD NÚT
+                        <% } else if (file.category === 'mod_trang_phuc') { %>
+                            <i class="fas fa-tshirt"></i> MOD TRANG PHỤC
+                        <% } else if (file.category === 'tool_aov') { %>
+                            <i class="fas fa-tools"></i> TOOL AOV
+                        <% } else if (file.category === 'mod_thong_bao') { %>
+                            <i class="fas fa-bell"></i> MOD THÔNG BÁO
+                        <% } else { %>
+                            <i class="fas fa-cube"></i> Khác
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Actions Mobile -->
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid rgba(255,255,255,0.04);">
+                <% if (isPurchased) { %>
+                    <a href="/file/download/<%= file.id %>" class="btn btn-primary" style="flex: 1; padding: 0.6rem; font-size: 0.85rem; border-radius: var(--radius-sm); text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                        <i class="fas fa-download"></i> Tải xuống
+                    </a>
+                <% } else { %>
+                    <% if (file.category === 'tool_aov') { %>
+                        <form method="POST" action="/purchase/buy/<%= file.id %>" style="flex: 1;">
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.6rem; font-size: 0.85rem; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                                <i class="fas fa-shopping-cart"></i> Mua ngay
+                            </button>
+                        </form>
+                    <% } else { %>
+                        <a href="/file/get-free/<%= file.id %>" class="btn btn-success" style="flex: 1; padding: 0.6rem; font-size: 0.8rem; border-radius: var(--radius-sm); text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.4rem; font-weight: 600;">
+                            <i class="fas fa-gift"></i> 🎁 Nhận Free
+                        </a>
+                        <form method="POST" action="/purchase/buy/<%= file.id %>" style="flex: 1;">
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.6rem; font-size: 0.85rem; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; gap: 0.4rem; font-weight: 600;">
+                                <i class="fas fa-shopping-cart"></i> Mua
+                            </button>
+                        </form>
+                    <% } %>
+                <% } %>
+            </div>
+            
+            <!-- Discount Code -->
+            <% if (!isPurchased && file.category !== 'tool_aov') { %>
+            <div style="display: flex; gap: 0.3rem; flex-wrap: wrap; align-items: center; margin-top: 0.4rem;">
+                <input type="text" name="discount_code" id="discountCodeInput" 
+                       placeholder="🎟️ Mã giảm giá" 
+                       style="flex: 1; min-width: 60px; padding: 0.3rem 0.6rem; background: var(--bg-primary); border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 0.6rem;">
+                <button onclick="applyDiscount()" class="btn btn-outline btn-sm" style="padding: 0.3rem 0.6rem; font-size: 0.55rem; border-radius: var(--radius-sm); white-space: nowrap;">
+                    <i class="fas fa-check"></i> Áp dụng
+                </button>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<% } %>
+
+<script>
+    function applyDiscount() {
+        const code = document.getElementById('discountCodeInput').value;
+        if (code) {
+            const form = document.querySelector('form[action*="/purchase/buy/"]');
+            if (form) {
+                let hiddenInput = form.querySelector('input[name="discount_code"]');
+                if (!hiddenInput) {
+                    hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = 'discount_code';
+                    form.appendChild(hiddenInput);
+                }
+                hiddenInput.value = code;
+                form.submit();
+            }
+        }
+    }
+
+    // Responsive: PC 2 columns, Mobile 1 column
+    function handleResponsive() {
+        const pcView = document.querySelector('.pc-view');
+        const mobileView = document.querySelector('.mobile-view');
+        if (window.innerWidth <= 768) {
+            if (pcView) pcView.style.display = 'none';
+            if (mobileView) mobileView.style.display = 'flex';
+        } else {
+            if (pcView) pcView.style.display = 'grid';
+            if (mobileView) mobileView.style.display = 'none';
+        }
+    }
+    
+    window.addEventListener('load', handleResponsive);
+    window.addEventListener('resize', handleResponsive);
+</script>

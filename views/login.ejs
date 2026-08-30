@@ -1,0 +1,51 @@
+<%- include('base', { title: 'Đăng nhập' }) %>
+
+<div class="fade-up" style="max-width: 440px; margin: 1.5rem auto;">
+    <div class="card-glow" style="padding: 2rem;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div style="display: inline-block; padding: 1rem; background: var(--gradient-glow); border-radius: 50%; margin-bottom: 0.8rem;">
+                <i class="fas fa-sign-in-alt" style="font-size: 2rem; background: var(--gradient-main); -webkit-background-clip: text; background-clip: text; color: transparent;"></i>
+            </div>
+            <h2 style="font-size: 1.6rem; font-weight: 700;">Chào mừng trở lại</h2>
+            <p class="text-muted" style="font-size: 0.85rem;">Đăng nhập để tiếp tục mua sắm</p>
+        </div>
+        
+        <form method="POST" action="/auth/login">
+            <div style="margin-bottom: 1.2rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 500;">
+                    <i class="fas fa-user"></i> Tên đăng nhập
+                </label>
+                <input type="text" name="username" placeholder="Nhập tên đăng nhập" required
+                       style="width: 100%; padding: 0.8rem 1rem; background: #0a0a0a; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); color: white; font-size: 1rem;">
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 500;">
+                    <i class="fas fa-lock"></i> Mật khẩu
+                </label>
+                <div style="position: relative;">
+                    <input type="password" name="password" id="password" placeholder="Nhập mật khẩu" required
+                           style="width: 100%; padding: 0.8rem 3rem 0.8rem 1rem; background: #0a0a0a; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); color: white; font-size: 1rem;">
+                    <button type="button" onclick="togglePassword('password', 'eyeIcon')" 
+                            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted);">
+                        <i id="eyeIcon" class="fas fa-eye-slash"></i>
+                    </button>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.8rem; font-size: 1rem; margin-bottom: 1rem;">
+                <i class="fas fa-sign-in-alt"></i> Đăng nhập
+            </button>
+        </form>
+        
+        <div style="text-align: center;">
+            <a href="/auth/forgot-password" style="color: var(--neon-cyan); text-decoration: none; font-size: 0.85rem;">
+                <i class="fas fa-key"></i> Quên mật khẩu?
+            </a>
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                <span class="text-muted" style="font-size: 0.85rem;">Chưa có tài khoản?</span>
+                <a href="/auth/register" style="color: var(--neon-cyan); text-decoration: none; font-weight: 600; margin-left: 0.5rem;">
+                    Đăng ký ngay <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

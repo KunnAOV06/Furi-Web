@@ -1,0 +1,21 @@
+<%- include('base', { title: '500 - Lỗi server' }) %>
+
+<div style="text-align: center; padding: 4rem 2rem;">
+    <div style="font-size: 5rem; font-weight: 900; color: var(--neon-red);">
+        500
+    </div>
+    <h1 style="font-size: 1.8rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.5rem;">
+        Lỗi máy chủ
+    </h1>
+    <p class="text-muted" style="font-size: 0.95rem; max-width: 400px; margin: 0 auto 1.5rem;">
+        Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.
+    </p>
+    <% if (error && process.env.NODE_ENV === 'development') { %>
+        <div style="background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-sm); text-align: left; margin: 1rem auto; max-width: 600px; overflow: auto;">
+            <pre style="color: var(--neon-red); font-size: 0.8rem;"><%= error %></pre>
+        </div>
+    <% } %>
+    <a href="/" class="btn btn-primary">
+        <i class="fas fa-home"></i> Về trang chủ
+    </a>
+</div>

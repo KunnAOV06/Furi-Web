@@ -1,0 +1,94 @@
+<%- include('base', { title: 'Sản phẩm của tôi' }) %>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <h2 style="display: flex; align-items: center; gap: 0.75rem; font-size: 1.3rem;">
+            <i class="fas fa-file" style="color: var(--neon-red);"></i> Sản phẩm của tôi
+        </h2>
+        <div style="display: flex; gap: 0.75rem;">
+            <div style="background: var(--bg-primary); padding: 0.4rem 0.8rem; border-radius: 50px;">
+                <i class="fas fa-chart-line" style="color: var(--neon-green);"></i>
+                <span style="font-size: 0.8rem;">Tổng: <strong><%= files.length %></strong> SP</span>
+            </div>
+            <a href="/file/upload" class="btn btn-primary" style="padding: 0.4rem 1rem; font-size: 0.8rem;">
+                <i class="fas fa-plus"></i> Thêm mới
+            </a>
+        </div>
+    </div>
+    
+    <% if (files && files.length > 0) { %>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                <thead>
+                    <tr style="background: var(--bg-primary); border-bottom: 2px solid var(--neon-red);">
+                        <th style="padding: 0.8rem 0.5rem; text-align: center; width: 60px;">Ảnh</th>
+                        <th style="padding: 0.8rem 0.5rem; text-align: left;">Tên sản phẩm</th>
+                        <th style="padding: 0.8rem 0.5rem; text-align: right;">Giá</th>
+                        <th style="padding: 0.8rem 0.5rem; text-align: center;">Lượt tải</th>
+                        <th style="padding: 0.8rem 0.5rem; text-align: center;">Trạng thái</th>
+                        <th style="padding: 0.8rem 0.5rem; text-align: center;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% files.forEach(function(file) { %>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 0.8rem 0.5rem; text-align: center;">
+                            <% if (file.thumbnail) { %>
+                                <img src="/file/thumbnail/<%= file.thumbnail %>" style="width: 45px; height: 45px; object-fit: cover; border-radius: 10px;">
+                            <% } else { %>
+                                <div style="width: 45px; height: 45px; background: var(--bg-primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                                    <i class="fas fa-file" style="font-size: 1.2rem; color: var(--text-muted);"></i>
+                                </div>
+                            <% } %>
+                        </td>
+                        <td style="padding: 0.8rem 0.5rem;">
+                            <strong style="font-size: 0.9rem;"><%= file.product_name %></strong>
+                            <br><small class="text-muted" style="font-size: 0.7rem;"><%= file.original_name ? file.original_name.substring(0, 30) : '' %></small>
+                        </td>
+                        <td style="padding: 0.8rem 0.5rem; text-align: right;">
+                            <span style="font-weight: 600; color: var(--neon-red); font-size: 0.9rem;"><%= formatPrice(file.price) %></span>
+                        </td>
+                        <td style="padding: 0.8rem 0.5rem; text-align: center;">
+                            <span style="background: var(--bg-primary); padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.8rem;">
+                                <i class="fas fa-download"></i> <%= file.download_count || 0 %>
+                            </span>
+                        </td>
+                        <td style="padding: 0.8rem 0.5rem; text-align: center;">
+                            <% if (file.is_active) { %>
+                                <span style="color: var(--neon-green);"><i class="fas fa-check-circle"></i> Kích hoạt</span>
+                            <% } else { %>
+                                <span style="color: var(--neon-red);"><i class="fas fa-ban"></i> Vô hiệu</span>
+                            <% } %>
+                        </td>
+                        <td style="padding: 0.8rem 0.5rem; text-align: center;">
+                            <form method="POST" action="/file/toggle/<%= file.id %>" style="display: inline-block;">
+                                <button type="submit" class="btn btn-primary btn-sm" style="padding: 0.3rem 0.8rem; font-size: 0.7rem;" 
+                                        title="<% if (file.is_active) { %>Vô hiệu hóa<% } else { %>Kích hoạt<% } %>">
+                                    <i class="fas fa-power-off"></i>
+                                </button>
+                            </form>
+                            <form method="POST" action="/file/delete/<%= file.id %>" style="display: inline-block;" 
+                                  onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">
+                                <button type="submit" class="btn btn-danger btn-sm" style="padding: 0.3rem 0.8rem; font-size: 0.7rem;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    <% } else { %>
+        <div style="text-align: center; padding: 3rem 1rem;">
+            <div style="background: var(--bg-primary); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                <i class="fas fa-file" style="font-size: 2.5rem; color: var(--text-muted);"></i>
+            </div>
+            <h3 style="margin-bottom: 0.5rem;">Chưa có sản phẩm nào</h3>
+            <p class="text-muted" style="margin-bottom: 1.5rem;">Hãy đăng bán sản phẩm đầu tiên của bạn!</p>
+            <a href="/file/upload" class="btn btn-primary" style="padding: 0.6rem 1.5rem;">
+                <i class="fas fa-plus"></i> Đăng bán ngay
+            </a>
+        </div>
+    <% } %>
+</div>

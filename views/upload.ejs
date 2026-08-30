@@ -1,0 +1,154 @@
+<%- include('base', { title: 'Đăng bán sản phẩm' }) %>
+
+<div class="fade-up" style="max-width: 800px; margin: 0 auto;">
+    <div style="background: var(--bg-card); border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.04); box-shadow: var(--shadow-premium); overflow: hidden;">
+        
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, rgba(255,23,68,0.04), rgba(41,121,255,0.04)); padding: 1rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.04);">
+            <div style="display: flex; align-items: center; gap: 0.8rem;">
+                <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(255,23,68,0.12); display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-cloud-upload-alt" style="color: var(--neon-red); font-size: 0.9rem;"></i>
+                </div>
+                <div>
+                    <h3 style="font-size: 0.95rem; font-weight: 700; margin: 0; color: var(--text-primary);">Đăng bán sản phẩm</h3>
+                    <p style="font-size: 0.7rem; color: var(--text-muted); margin: 0;">Chia sẻ sản phẩm của bạn với cộng đồng</p>
+                </div>
+            </div>
+        </div>
+        
+        <form method="POST" action="/file/upload" enctype="multipart/form-data" style="padding: 1.5rem;">
+            
+            <!-- Product Name -->
+            <div style="margin-bottom: 1.2rem;">
+                <label style="font-weight: 600; color: var(--text-secondary); font-size: 0.8rem; display: block; margin-bottom: 0.3rem;">
+                    <i class="fas fa-tag" style="color: var(--neon-red);"></i> Tên sản phẩm <span style="color: var(--neon-red);">*</span>
+                </label>
+                <input type="text" name="product_name" placeholder="VD: Mod nút Pro, Skin Liên Quân..." required
+                       style="width: 100%; padding: 0.7rem 1rem; background: var(--bg-primary); border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 0.9rem;">
+            </div>
+            
+            <!-- Category -->
+            <div style="margin-bottom: 1.2rem;">
+                <label style="font-weight: 600; color: var(--text-secondary); font-size: 0.8rem; display: block; margin-bottom: 0.3rem;">
+                    <i class="fas fa-folder" style="color: var(--neon-cyan);"></i> Danh mục <span style="color: var(--neon-red);">*</span>
+                </label>
+                <select name="category" id="categorySelect" required
+                        style="width: 100%; padding: 0.7rem 1rem; background: var(--bg-primary); border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 0.9rem; cursor: pointer;">
+                    <option value="mod_nut" style="color: var(--neon-red);">🎮 MOD NÚT — Mod FX, Joystick, Icon Shop</option>
+                    <option value="mod_trang_phuc" style="color: var(--neon-blue);">👕 MOD TRANG PHỤC — Kho Skin đa dạng</option>
+                    <option value="tool_aov" style="color: var(--neon-green);">🛠️ TOOL AOV — Công cụ hỗ trợ AOV</option>
+                    <option value="mod_thong_bao" style="color: var(--neon-cyan);">🔔 MOD THÔNG BÁO — Hiệu ứng hạ gục</option>
+                </select>
+            </div>
+            
+            <!-- Thumbnail -->
+            <div style="margin-bottom: 1.2rem;">
+                <label style="font-weight: 600; color: var(--text-secondary); font-size: 0.8rem; display: block; margin-bottom: 0.3rem;">
+                    <i class="fas fa-image" style="color: var(--neon-pink);"></i> Ảnh sản phẩm <span style="color: var(--neon-red);">*</span>
+                </label>
+                <div style="border: 2px dashed var(--border-color); border-radius: var(--radius-sm); padding: 1.5rem; text-align: center; cursor: pointer; transition: var(--transition); background: var(--bg-primary);"
+                     onclick="document.getElementById('thumbnailInput').click()"
+                     onmouseover="this.style.borderColor='var(--neon-pink)'; this.style.background='rgba(255,64,129,0.02)'" 
+                     onmouseout="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-primary)'">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--neon-pink); opacity: 0.5; display: block; margin-bottom: 0.5rem;"></i>
+                    <p style="margin: 0; color: var(--text-secondary); font-size: 0.85rem;">
+                        <strong style="color: var(--neon-pink);">Click</strong> để chọn ảnh
+                    </p>
+                    <p class="text-muted" style="margin: 0.3rem 0 0; font-size: 0.7rem;">PNG, JPG, JPEG, GIF, WEBP</p>
+                </div>
+                <input type="file" id="thumbnailInput" name="thumbnail" accept="image/*" required style="display: none;" 
+                       onchange="updateFileName(this, 'thumbnailName')">
+                <div id="thumbnailName" class="text-muted" style="margin-top: 0.3rem; font-size: 0.7rem;"></div>
+            </div>
+            
+            <!-- File -->
+            <div style="margin-bottom: 1.2rem;">
+                <label style="font-weight: 600; color: var(--text-secondary); font-size: 0.8rem; display: block; margin-bottom: 0.3rem;">
+                    <i class="fas fa-file" style="color: var(--neon-cyan);"></i> File sản phẩm <span style="color: var(--neon-red);">*</span>
+                </label>
+                <div style="border: 2px dashed var(--border-color); border-radius: var(--radius-sm); padding: 1.5rem; text-align: center; cursor: pointer; transition: var(--transition); background: var(--bg-primary);"
+                     onclick="document.getElementById('fileInput').click()"
+                     onmouseover="this.style.borderColor='var(--neon-cyan)'; this.style.background='rgba(0,229,255,0.02)'" 
+                     onmouseout="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-primary)'">
+                    <i class="fas fa-file-upload" style="font-size: 2rem; color: var(--neon-cyan); opacity: 0.5; display: block; margin-bottom: 0.5rem;"></i>
+                    <p style="margin: 0; color: var(--text-secondary); font-size: 0.85rem;">
+                        <strong style="color: var(--neon-cyan);">Click</strong> để chọn file
+                    </p>
+                    <p class="text-muted" style="margin: 0.3rem 0 0; font-size: 0.7rem;">Tối đa 50MB</p>
+                </div>
+                <input type="file" id="fileInput" name="file" required style="display: none;"
+                       onchange="updateFileName(this, 'fileName')">
+                <div id="fileName" class="text-muted" style="margin-top: 0.3rem; font-size: 0.7rem;"></div>
+            </div>
+            
+            <!-- Price -->
+            <div style="margin-bottom: 1.2rem;">
+                <label style="font-weight: 600; color: var(--text-secondary); font-size: 0.8rem; display: block; margin-bottom: 0.3rem;">
+                    <i class="fas fa-money-bill-wave" style="color: var(--neon-green);"></i> Giá bán (VNĐ) <span style="color: var(--neon-red);">*</span>
+                </label>
+                <input type="number" name="price" step="1000" placeholder="VD: 50000" required
+                       style="width: 100%; padding: 0.7rem 1rem; background: var(--bg-primary); border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 0.9rem;">
+                <span class="text-muted" style="font-size: 0.65rem;">Để 0 nếu sản phẩm miễn phí</span>
+            </div>
+            
+            <!-- Free Link -->
+            <div id="freeLinkSection" style="margin-bottom: 1.2rem; padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-sm); border: 1px solid rgba(0, 230, 118, 0.15);">
+                <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem;">
+                    <i class="fas fa-gift" style="color: var(--neon-green); font-size: 1rem;"></i>
+                    <label style="margin: 0; font-weight: 700; color: var(--neon-green); font-size: 0.9rem;">🎁 Link nhận Free</label>
+                    <span class="badge badge-green" style="font-size: 0.45rem; padding: 0.15rem 0.6rem;">Tùy chọn</span>
+                </div>
+                <p class="text-muted" style="font-size: 0.7rem; margin-bottom: 0.5rem;">
+                    <i class="fas fa-info-circle"></i> Nhập link để người dùng có thể tải miễn phí
+                </p>
+                <input type="url" name="free_link" id="freeLinkInput" placeholder="https://drive.google.com/... hoặc để trống" 
+                       style="width: 100%; padding: 0.7rem 1rem; background: var(--bg-primary); border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary);">
+                <div style="display: flex; gap: 0.4rem; margin-top: 0.5rem; flex-wrap: wrap;">
+                    <button type="button" onclick="setFreeLink('https://drive.google.com/file/d/')" class="btn btn-outline btn-sm" style="font-size: 0.6rem; border-color: rgba(255,255,255,0.06);">
+                        <i class="fab fa-google-drive" style="color: var(--neon-red);"></i> Drive
+                    </button>
+                    <button type="button" onclick="setFreeLink('https://www.mediafire.com/file/')" class="btn btn-outline btn-sm" style="font-size: 0.6rem; border-color: rgba(255,255,255,0.06);">
+                        <i class="fas fa-cloud" style="color: var(--neon-blue);"></i> MediaFire
+                    </button>
+                    <button type="button" onclick="setFreeLink('https://mega.nz/file/')" class="btn btn-outline btn-sm" style="font-size: 0.6rem; border-color: rgba(255,255,255,0.06);">
+                        <i class="fas fa-database" style="color: var(--neon-purple);"></i> Mega
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Description -->
+            <div style="margin-bottom: 1.2rem;">
+                <label style="font-weight: 600; color: var(--text-secondary); font-size: 0.8rem; display: block; margin-bottom: 0.3rem;">
+                    <i class="fas fa-align-left" style="color: var(--neon-yellow);"></i> Mô tả sản phẩm
+                </label>
+                <textarea name="description" rows="4" placeholder="Mô tả chi tiết về sản phẩm của bạn..." 
+                          style="width: 100%; padding: 0.7rem 1rem; background: var(--bg-primary); border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 0.9rem; resize: vertical;"></textarea>
+            </div>
+            
+            <!-- Submit -->
+            <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+                <button type="submit" class="btn btn-primary" style="flex: 1; padding: 0.8rem; font-size: 1rem; border-radius: var(--radius-sm);">
+                    <i class="fas fa-cloud-upload-alt"></i> Đăng bán ngay
+                </button>
+                <a href="/" class="btn btn-outline" style="flex: 0.5; padding: 0.8rem; font-size: 1rem; border-radius: var(--radius-sm); justify-content: center;">
+                    <i class="fas fa-times"></i> Hủy
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function setFreeLink(template) {
+        const input = document.getElementById('freeLinkInput');
+        if (input) {
+            if (!input.value || input.value.includes('https://')) {
+                input.value = template;
+                input.focus();
+            } else {
+                input.value = template + input.value;
+                input.focus();
+            }
+        }
+    }
+</script>

@@ -1,0 +1,194 @@
+<%- include('base', { title: category_name + ' - FURI WEB' }) %>
+
+<!-- Back Button -->
+<div class="fade-up" style="margin-bottom: 1rem;">
+    <a href="/" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); text-decoration: none; font-size: 0.75rem; transition: var(--transition); padding: 0.3rem 1rem; border-radius: var(--radius-full); background: var(--bg-secondary); border: 1px solid rgba(255,255,255,0.04);"
+       onmouseenter="this.style.color='var(--text-primary)'; this.style.borderColor='<%= category_color %>44'"
+       onmouseleave="this.style.color='var(--text-secondary)'; this.style.borderColor='rgba(255,255,255,0.04)'">
+        <i class="fas fa-arrow-left" style="font-size: 0.6rem;"></i>
+        <span class="hide-mobile">Quay lại</span>
+    </a>
+</div>
+
+<!-- Category Header -->
+<section class="fade-up" style="position: relative; padding: 1.5rem 1rem; border-radius: var(--radius); overflow: hidden; margin-bottom: 1.5rem; background: var(--bg-card); border: 1px solid rgba(255,255,255,0.04);">
+    <div style="position: absolute; top: -50%; right: -20%; width: 60%; height: 200%; background: radial-gradient(ellipse, <%= category_color %>06, transparent 70%); pointer-events: none;"></div>
+    <div style="position: absolute; bottom: -50%; left: -20%; width: 50%; height: 150%; background: radial-gradient(ellipse, <%= category_color %>04, transparent 70%); pointer-events: none;"></div>
+    
+    <div style="position: relative; z-index: 1; text-align: center;">
+        <div style="display: inline-block; padding: 0.2rem 1rem; background: var(--gradient-glow); border-radius: 50px; margin-bottom: 0.6rem; border: 1px solid rgba(255,23,68,0.08);">
+            <span style="color: var(--neon-cyan); font-weight: 700; font-size: 0.5rem; text-transform: uppercase; letter-spacing: 2px;">
+                <i class="fas fa-skull"></i> <%= category_name %>
+            </span>
+        </div>
+        
+        <h1 style="font-size: clamp(1.4rem, 4vw, 2.5rem); font-weight: 900; margin: 0 0 0.2rem; line-height: 1.1;">
+            <span style="color: <%= category_color %>; display: inline-block;">
+                <%= category_name %>
+            </span>
+        </h1>
+        
+        <p style="color: var(--text-secondary); font-size: clamp(0.7rem, 1.5vw, 0.9rem); max-width: 400px; margin: 0 auto 0.8rem;">
+            <i class="fas <%= category_icon %>" style="color: <%= category_color %>;"></i> <%= category_description %>
+        </p>
+        
+        <div style="display: inline-flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; background: var(--bg-secondary); padding: 0.4rem 1.2rem; border-radius: var(--radius-full); border: 1px solid rgba(255,255,255,0.04);">
+            <div style="text-align: center;">
+                <div style="font-size: 1rem; font-weight: 800; color: <%= category_color %>;"><%= files.length %></div>
+                <div class="text-muted" style="font-size: 0.4rem; text-transform: uppercase; letter-spacing: 0.3px;">Sản phẩm</div>
+            </div>
+            <div style="width: 1px; background: var(--border-color);"></div>
+            <div style="text-align: center;">
+                <div style="font-size: 1rem; font-weight: 800; color: var(--neon-cyan);">
+                    <%= files.reduce((sum, f) => sum + (f.download_count || 0), 0) %>
+                </div>
+                <div class="text-muted" style="font-size: 0.4rem; text-transform: uppercase; letter-spacing: 0.3px;">Lượt tải</div>
+            </div>
+            <div style="width: 1px; background: var(--border-color);"></div>
+            <div style="text-align: center;">
+                <div style="font-size: 1rem; font-weight: 800; color: var(--neon-green);">
+                    <%= files.filter(f => f.has_demo).length %>
+                </div>
+                <div class="text-muted" style="font-size: 0.4rem; text-transform: uppercase; letter-spacing: 0.3px;">Có Demo</div>
+            </div>
+        </div>
+        
+        <div style="max-width: 100%; margin: 1rem auto 0;">
+            <div style="display: flex; gap: 0.4rem; background: var(--bg-secondary); border-radius: var(--radius-full); padding: 0.2rem; border: 1px solid rgba(255,255,255,0.04); max-width: 480px; margin: 0 auto;"
+                 onmouseenter="this.style.borderColor='<%= category_color %>44'"
+                 onmouseleave="this.style.borderColor='rgba(255,255,255,0.04)'">
+                <div style="display: flex; align-items: center; padding-left: 0.8rem;">
+                    <i class="fas fa-search" style="color: var(--text-muted); font-size: 0.7rem;"></i>
+                </div>
+                <input type="text" id="searchInput" placeholder="Tìm kiếm trong <%= category_name %>..." 
+                       style="flex: 1; background: none; border: none; padding: 0.4rem 0.3rem; color: var(--text-primary); font-size: 0.75rem; outline: none; min-width: 60px;">
+                <button onclick="searchProducts()" class="btn btn-primary" style="border-radius: var(--radius-full); padding: 0.3rem 1.2rem; font-size: 0.7rem; white-space: nowrap; flex-shrink: 0;">
+                    <i class="fas fa-search"></i> <span class="hide-mobile">Tìm</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Products Grid -->
+<% if (files && files.length > 0) { %>
+    <div class="grid" id="productsGrid" style="grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.8rem;">
+        <% files.forEach(function(file) { %>
+        <div class="card-glow product-card fade-up" 
+             style="position: relative; overflow: hidden; cursor: pointer; padding: 0.6rem; border-radius: var(--radius-sm);"
+             onclick="window.location.href='/file/<%= file.id %>'"
+             onmouseenter="this.style.borderColor='<%= category_color %>55'; this.style.transform='translateY(-3px)'; this.style.boxShadow='var(--shadow-premium)'"
+             onmouseleave="this.style.borderColor='rgba(255,255,255,0.04)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+            
+            <div style="position: relative; overflow: hidden; border-radius: var(--radius-sm); margin-bottom: 0.4rem; background: var(--bg-secondary); height: 120px;">
+                <% if (file.thumbnail) { %>
+                    <img src="/file/thumbnail/<%= file.thumbnail %>" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;"
+                         onmouseover="this.style.transform='scale(1.06)'"
+                         onmouseout="this.style.transform='scale(1)'">
+                <% } else { %>
+                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg, <%= category_color %>22, var(--bg-secondary)); display: flex; align-items: center; justify-content: center;">
+                        <i class="<%= category_icon %>" style="font-size: 2rem; color: <%= category_color %>44;"></i>
+                    </div>
+                <% } %>
+                
+                <div style="position: absolute; bottom: 6px; left: 6px; background: <%= category_color %>; color: white; padding: 0.1rem 0.5rem; border-radius: var(--radius-full); font-size: 0.4rem; font-weight: 700; box-shadow: 0 4px 15px <%= category_color %>44;">
+                    <i class="<%= category_icon %>"></i>
+                </div>
+                
+                <% if (file.has_demo) { %>
+                <div style="position: absolute; top: 6px; right: 6px; background: linear-gradient(135deg, #ff1744, #ff4081); color: white; padding: 0.1rem 0.5rem; border-radius: var(--radius-full); font-size: 0.4rem; font-weight: 700; box-shadow: 0 4px 15px rgba(255,23,68,0.3); animation: pulse 2s infinite;">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <% } %>
+            </div>
+            
+            <h3 style="font-size: 0.75rem; font-weight: 700; margin: 0 0 0.1rem; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; color: var(--text-primary);">
+                <%= file.product_name %>
+            </h3>
+            
+            <p style="color: var(--text-secondary); font-size: 0.55rem; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin: 0 0 0.3rem; min-height: 1.4rem;">
+                <%= file.description ? file.description.substring(0, 35) + '...' : '' %>
+            </p>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.3rem; border-top: 1px solid rgba(255,255,255,0.04);">
+                <span style="font-weight: 700; font-size: 0.75rem; color: <%= category_color %>;"><%= formatPrice(file.price) %></span>
+                <span style="color: var(--text-muted); font-size: 0.45rem;">
+                    <i class="fas fa-user"></i> <%= file.seller_username ? file.seller_username.substring(0, 4) : 'A' %>
+                </span>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+    
+    <div class="fade-up" style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.2rem; flex-wrap: wrap; gap: 0.6rem; padding: 0.5rem 0.8rem; background: var(--bg-secondary); border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.04);">
+        <span class="text-muted" style="font-size: 0.6rem;">
+            <i class="fas fa-cubes" style="color: <%= category_color %>;"></i> 
+            Hiển thị <strong style="color: var(--text-primary);"><%= files.length %></strong> sản phẩm
+        </span>
+        <a href="/" class="btn btn-outline btn-sm" style="font-size: 0.6rem; padding: 0.2rem 0.8rem;">
+            <i class="fas fa-arrow-left"></i> Về trang chủ
+        </a>
+    </div>
+    
+<% } else { %>
+    <div class="fade-up" style="text-align: center; padding: 2.5rem 1.5rem; background: var(--bg-card); border-radius: var(--radius); border: 1px dashed <%= category_color %>44;">
+        <div style="width: 70px; height: 70px; margin: 0 auto 0.8rem; border-radius: 50%; background: <%= category_color %>11; display: flex; align-items: center; justify-content: center; border: 2px solid <%= category_color %>22;">
+            <i class="<%= category_icon %>" style="font-size: 2rem; color: <%= category_color %>55;"></i>
+        </div>
+        <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.2rem;">
+            Chưa có sản phẩm nào
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.75rem; max-width: 300px; margin: 0 auto 1rem;">
+            Danh mục <strong style="color: <%= category_color %>;"><%= category_name %></strong> hiện chưa có sản phẩm.
+        </p>
+        <a href="/" class="btn btn-primary btn-sm" style="font-size: 0.7rem; padding: 0.3rem 1rem;">
+            <i class="fas fa-home"></i> Về trang chủ
+        </a>
+    </div>
+<% } %>
+
+<!-- Search Empty -->
+<div id="searchEmpty" style="display: none; text-align: center; padding: 1.5rem 1rem; background: var(--bg-card); border-radius: var(--radius); border: 1px dashed var(--border-color);">
+    <i class="fas fa-search" style="font-size: 1.5rem; color: var(--text-muted); display: block; margin-bottom: 0.2rem;"></i>
+    <p style="color: var(--text-secondary); font-size: 0.75rem;">
+        Không tìm thấy "<strong id="searchTermDisplay" style="color: var(--text-primary);"></strong>"
+    </p>
+    <button onclick="document.getElementById('searchInput').value=''; searchProducts();" class="btn btn-outline btn-sm" style="margin-top: 0.3rem; font-size: 0.6rem;">
+        <i class="fas fa-undo"></i> Xóa tìm kiếm
+    </button>
+</div>
+
+<script>
+    function searchProducts() {
+        const term = document.getElementById('searchInput').value.toLowerCase().trim();
+        const cards = document.querySelectorAll('.product-card');
+        let visible = 0;
+        
+        cards.forEach(card => {
+            const name = card.querySelector('h3').innerText.toLowerCase();
+            if (term && !name.includes(term)) {
+                card.style.display = 'none';
+            } else {
+                card.style.display = 'block';
+                visible++;
+            }
+        });
+        
+        const grid = document.getElementById('productsGrid');
+        const empty = document.getElementById('searchEmpty');
+        const termDisplay = document.getElementById('searchTermDisplay');
+        
+        if (visible === 0 && term) {
+            if (termDisplay) termDisplay.textContent = term;
+            empty.style.display = 'block';
+            grid.style.display = 'none';
+        } else {
+            empty.style.display = 'none';
+            grid.style.display = 'grid';
+        }
+    }
+
+    document.getElementById('searchInput').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') searchProducts();
+    });
+</script>

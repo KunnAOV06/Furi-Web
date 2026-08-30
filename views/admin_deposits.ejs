@@ -1,0 +1,114 @@
+<%- include('base', { title: 'Quản lý rút tiền' }) %>
+
+<div class="fade-up" style="margin-bottom: 2rem;">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        <div style="width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(135deg, #10b981, #059669); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 40px rgba(16,185,129,0.15);">
+            <i class="fas fa-money-bill-wave" style="font-size: 1.8rem; color: white;"></i>
+        </div>
+        <div>
+            <h1 style="font-size: 1.6rem; font-weight: 800; margin: 0;">
+                <span class="text-gradient" style="background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    Quản lý rút tiền
+                </span>
+            </h1>
+            <p class="text-muted" style="font-size: 0.85rem; margin: 0.2rem 0 0;">
+                <i class="fas fa-hand-holding-usd" style="color: var(--neon-green);"></i> 
+                Quản lý tất cả yêu cầu rút tiền
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; min-width: 1000px;">
+            <thead>
+                <tr style="background: var(--bg-primary); border-bottom: 2px solid rgba(16,185,129,0.1);">
+                    <th style="padding: 1rem 0.8rem; text-align: left;">ID</th>
+                    <th style="padding: 1rem 0.8rem; text-align: left;">Người dùng</th>
+                    <th style="padding: 1rem 0.8rem; text-align: right;">Số tiền</th>
+                    <th style="padding: 1rem 0.8rem; text-align: right;">Phí</th>
+                    <th style="padding: 1rem 0.8rem; text-align: right;">Thực nhận</th>
+                    <th style="padding: 1rem 0.8rem; text-align: left;">Ngân hàng</th>
+                    <th style="padding: 1rem 0.8rem; text-align: center;">Trạng thái</th>
+                    <th style="padding: 1rem 0.8rem; text-align: center;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% withdraws.forEach(function(w) { %>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.03); transition: var(--transition);"
+                    onmouseenter="this.style.background='rgba(255,255,255,0.01)'"
+                    onmouseleave="this.style.background='transparent'">
+                    <td style="padding: 1rem 0.8rem;">
+                        <span style="background: var(--bg-primary); padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.7rem;">#<%= w.id %></span>
+                    </td>
+                    <td style="padding: 1rem 0.8rem;">
+                        <div style="display: flex; align-items: center; gap: 0.6rem;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: white; flex-shrink: 0;">
+                                <%= w.username[0].toUpperCase() %>
+                            </div>
+                            <div>
+                                <strong style="font-size: 0.85rem; color: var(--text-primary);"><%= w.username %></strong>
+                                <br><small class="text-muted" style="font-size: 0.6rem;"><i class="fas fa-envelope"></i> <%= w.email %></small>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="padding: 1rem 0.8rem; text-align: right;">
+                        <span style="font-weight: 700; font-size: 0.9rem; color: var(--neon-red);"><%= formatPrice(w.amount) %></span>
+                    </td>
+                    <td style="padding: 1rem 0.8rem; text-align: right;">
+                        <span class="text-muted" style="font-size: 0.8rem;"><%= formatPrice(w.fee) %></span>
+                    </td>
+                    <td style="padding: 1rem 0.8rem; text-align: right;">
+                        <span style="font-weight: 700; font-size: 0.9rem; color: var(--neon-green);"><%= formatPrice(w.net_amount) %></span>
+                    </td>
+                    <td style="padding: 1rem 0.8rem;">
+                        <div>
+                            <span style="font-size: 0.75rem; font-weight: 500; color: var(--text-secondary);"><%= w.bank_name %></span>
+                            <br><small class="text-muted" style="font-size: 0.55rem;"><%= w.bank_account_name %></small>
+                            <br><small class="text-muted" style="font-size: 0.5rem;"><%= w.bank_account_number %></small>
+                        </div>
+                    </td>
+                    <td style="padding: 1rem 0.8rem; text-align: center;">
+                        <% if (w.status === 'pending') { %>
+                            <span class="badge badge-yellow"><i class="fas fa-clock"></i> Chờ xử lý</span>
+                        <% } else if (w.status === 'processing') { %>
+                            <span class="badge badge-blue"><i class="fas fa-spinner fa-pulse"></i> Đang xử lý</span>
+                        <% } else if (w.status === 'completed') { %>
+                            <span class="badge badge-green"><i class="fas fa-check-circle"></i> Hoàn thành</span>
+                        <% } else { %>
+                            <span class="badge badge-red"><i class="fas fa-ban"></i> Từ chối</span>
+                        <% } %>
+                    </td>
+                    <td style="padding: 1rem 0.8rem; text-align: center;">
+                        <div style="display: flex; gap: 0.3rem; justify-content: center; flex-wrap: wrap;">
+                            <% if (w.status === 'pending') { %>
+                                <form method="POST" action="/admin/withdraws/<%= w.id %>/process" style="display: inline;">
+                                    <button type="submit" class="btn btn-info btn-sm" style="padding: 0.25rem 0.6rem; font-size: 0.6rem;">
+                                        <i class="fas fa-play"></i> Xử lý
+                                    </button>
+                                </form>
+                                <form method="POST" action="/admin/withdraws/<%= w.id %>/reject" style="display: inline;" 
+                                      onsubmit="return confirm('Từ chối yêu cầu rút tiền #<%= w.id %>? Tiền sẽ được hoàn lại.')">
+                                    <button type="submit" class="btn btn-danger btn-sm" style="padding: 0.25rem 0.6rem; font-size: 0.6rem;">
+                                        <i class="fas fa-times"></i> Từ chối
+                                    </button>
+                                </form>
+                            <% } else if (w.status === 'processing') { %>
+                                <form method="POST" action="/admin/withdraws/<%= w.id %>/complete" style="display: inline;" 
+                                      onsubmit="return confirm('Xác nhận đã chuyển tiền cho yêu cầu #<%= w.id %>?')">
+                                    <button type="submit" class="btn btn-success btn-sm" style="padding: 0.25rem 0.6rem; font-size: 0.6rem;">
+                                        <i class="fas fa-check"></i> Hoàn tất
+                                    </button>
+                                </form>
+                            <% } else { %>
+                                <span class="text-muted">—</span>
+                            <% } %>
+                        </div>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>

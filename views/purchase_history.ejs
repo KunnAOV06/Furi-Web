@@ -1,0 +1,115 @@
+<%- include('base', { title: 'Lịch sử mua hàng' }) %>
+
+<div class="fade-up" style="margin-bottom: 2rem;">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(135deg, #ff1744, #2979ff); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 40px rgba(255,23,68,0.2);">
+                <i class="fas fa-history" style="font-size: 1.8rem; color: white;"></i>
+            </div>
+            <div>
+                <h1 style="font-size: 1.6rem; font-weight: 800; margin: 0;">
+                    <span class="text-gradient">Lịch sử mua hàng</span>
+                </h1>
+                <p class="text-muted" style="font-size: 0.85rem; margin: 0.2rem 0 0;">
+                    <i class="fas fa-shopping-bag" style="color: var(--neon-cyan);"></i> 
+                    Quản lý tất cả giao dịch của bạn
+                </p>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; background: var(--bg-secondary); padding: 0.8rem 1.5rem; border-radius: var(--radius-full); border: 1px solid rgba(255,255,255,0.04);">
+            <div style="text-align: center;">
+                <div style="font-size: 1.2rem; font-weight: 800; color: var(--neon-cyan);"><%= purchases.length %></div>
+                <div class="text-muted" style="font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px;">Giao dịch</div>
+            </div>
+            <div style="width: 1px; background: var(--border-color);"></div>
+            <div style="text-align: center;">
+                <div style="font-size: 1.2rem; font-weight: 800; color: var(--neon-red);"><%= formatPrice(totalSpent) %></div>
+                <div class="text-muted" style="font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px;">Tổng chi tiêu</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% if (purchases && purchases.length > 0) { %>
+    <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+        <% purchases.forEach(function(p) { %>
+        <div style="background: var(--bg-card); border-radius: var(--radius); padding: 1rem 1.2rem; border: 1px solid rgba(255,255,255,0.04); display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;"
+             onmouseenter="this.style.borderColor='rgba(255,23,68,0.15)'"
+             onmouseleave="this.style.borderColor='rgba(255,255,255,0.04)'">
+            
+            <div style="width: 56px; height: 56px; border-radius: 10px; overflow: hidden; flex-shrink: 0; background: var(--bg-secondary); border: 1px solid var(--border-color);">
+                <% if (p.thumbnail) { %>
+                    <img src="/file/thumbnail/<%= p.thumbnail %>" style="width: 100%; height: 100%; object-fit: cover;">
+                <% } else { %>
+                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(255,23,68,0.1), rgba(41,121,255,0.1));">
+                        <i class="fas fa-file" style="color: var(--text-muted); font-size: 1.2rem;"></i>
+                    </div>
+                <% } %>
+            </div>
+            
+            <div style="flex: 1; min-width: 120px;">
+                <h3 style="font-size: 0.95rem; font-weight: 700; margin: 0; color: var(--text-primary);">
+                    <%= p.product_name || 'Sản phẩm đã xóa' %>
+                </h3>
+                <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 0.2rem;">
+                    <span class="text-muted" style="font-size: 0.65rem;">
+                        <i class="fas fa-user"></i> <%= p.username || 'Admin' %>
+                    </span>
+                    <span class="text-muted" style="font-size: 0.65rem;">
+                        <i class="fas fa-calendar"></i> <%= new Date(p.purchased_at).toLocaleDateString('vi-VN') %>
+                    </span>
+                </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                <div style="text-align: right;">
+                    <div style="font-weight: 800; font-size: 1.1rem; color: var(--neon-red);"><%= formatPrice(p.amount_paid) %></div>
+                    <div class="text-muted" style="font-size: 0.6rem;">
+                        <i class="fas fa-check-circle" style="color: var(--neon-green);"></i> Đã mua
+                    </div>
+                </div>
+                <a href="/purchase/download/<%= p.download_token %>" class="btn btn-primary btn-sm" style="padding: 0.4rem 1rem; font-size: 0.7rem; white-space: nowrap;">
+                    <i class="fas fa-download"></i> Tải
+                </a>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding: 1rem 1.5rem; background: var(--bg-secondary); border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.04); flex-wrap: wrap; gap: 0.8rem;">
+        <span class="text-muted" style="font-size: 0.75rem;">
+            <i class="fas fa-cubes" style="color: var(--neon-cyan);"></i> 
+            Hiển thị <strong style="color: var(--text-primary);"><%= purchases.length %></strong> giao dịch
+        </span>
+        <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+            <a href="/" class="btn btn-primary btn-sm">
+                <i class="fas fa-store"></i> Tiếp tục mua sắm
+            </a>
+            <a href="/deposit" class="btn btn-success btn-sm">
+                <i class="fas fa-plus-circle"></i> Nạp tiền
+            </a>
+        </div>
+    </div>
+    
+<% } else { %>
+    <div style="text-align: center; padding: 4rem 2rem; background: var(--bg-card); border-radius: var(--radius); border: 1px dashed rgba(255,23,68,0.15);">
+        <div style="width: 100px; height: 100px; margin: 0 auto 1.2rem; border-radius: 50%; background: rgba(255,23,68,0.06); display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,23,68,0.08);">
+            <i class="fas fa-shopping-bag" style="font-size: 2.8rem; color: var(--text-muted);"></i>
+        </div>
+        <h3 style="font-size: 1.3rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.3rem;">
+            Chưa có đơn hàng nào
+        </h3>
+        <p class="text-muted" style="font-size: 0.9rem; max-width: 400px; margin: 0 auto 1.5rem;">
+            Bạn chưa mua sản phẩm nào. Hãy khám phá ngay!
+        </p>
+        <div style="display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap;">
+            <a href="/" class="btn btn-primary">
+                <i class="fas fa-store"></i> Khám phá ngay
+            </a>
+            <a href="/deposit" class="btn btn-success">
+                <i class="fas fa-plus-circle"></i> Nạp tiền
+            </a>
+        </div>
+    </div>
+<% } %>
