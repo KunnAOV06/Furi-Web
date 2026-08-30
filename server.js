@@ -29,7 +29,7 @@ const app = express();
 
 // Rate limiting
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 phút
+    windowMs: 15 * 60 * 1000,
     max: 100,
     message: 'Quá nhiều yêu cầu, vui lòng thử lại sau',
 });
@@ -52,7 +52,7 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         secure: config.nodeEnv === 'production',
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 ngày
+        maxAge: 7 * 24 * 60 * 60 * 1000,
     },
 }));
 
@@ -93,15 +93,20 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).render('500', { 
+    res.status(500).render('500', {
         title: 'Lỗi server',
         error: config.nodeEnv === 'development' ? err.message : 'Đã xảy ra lỗi, vui lòng thử lại sau',
     });
 });
 
-// Start server
-const PORT = config.port;
-app.listen(PORT, () => {
-    console.log(`🚀 FURI WEB Server running on http://localhost:${PORT}`);
-    console.log(`📦 Environment: ${config.nodeEnv}`);
-});
+// ===== SỬA: Export cho Vercel =====
+module.exports = app;
+
+// ===== SỬA: Chạy local =====
+if (require.main === module) {
+    const PORT = config.port || 5000;
+    app.listen(PORT, () => {
+        console.log(`🚀 FURI WEB Server running on http://localhost:${PORT}`);
+        console.log(`📦 Environment: ${config.nodeEnv}`);
+    });
+}
