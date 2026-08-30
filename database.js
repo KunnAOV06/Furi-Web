@@ -1,41 +1,83 @@
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+// database.js
+const { Pool } = require('pg');
 const config = require('./config');
 
-const dbPath = config.databaseUrl.replace('sqlite:', '');
-const db = new sqlite3.Database(path.resolve(__dirname, dbPath || 'datafuri.db'));
+let pool;
 
-// Helper để chạy query promise
-const runQuery = (sql, params = []) => {
-    return new Promise((resolve, reject) => {
-        db.run(sql, params, function(err) {
-            if (err) reject(err);
-            else resolve({ id: this.lastID, changes: this.changes });
-        });
+if (config.databaseUrl) {
+    pool = new Pool({
+        connectionString: config.databaseUrl,
+        ssl: {
+            rejectUnauthorized: false
+        }
     });
+} else {
+    console.warn('⚠️ DATABASE_URL không được cấu hình');
+    // Fallback cho local development
+    pool = new Pool({
+        host: 'localhost',
+        port: 5432,
+        database: 'furi_web',
+        user: 'postgres',
+        password: 'postgres',
+    });
+}
+
+// Helper functions
+const runQuery = async (sql, params = []) => {
+    const client = await pool.connect();
+    try {
+        const result = await client.query(sql, params);
+        return { 
+            id: result.rows[0]?.id || null, 
+            changes: result.rowCount || 0,
+            rows: result.rows 
+        };
+    } finally {
+        client.release();
+    }
 };
 
-const getQuery = (sql, params = []) => {
-    return new Promise((resolve, reject) => {
-        db.get(sql, params, (err, row) => {
-            if (err) reject(err);
-            else resolve(row);
-        });
-    });
+const getQuery = async (sql, params = []) => {
+    const client = await pool.connect();
+    try {
+        const result = await client.query(sql, params);
+        return result.rows[0] || null;
+    } finally {
+        client.release();
+    }
 };
 
-const allQuery = (sql, params = []) => {
-    return new Promise((resolve, reject) => {
-        db.all(sql, params, (err, rows) => {
-            if (err) reject(err);
-            else resolve(rows);
-        });
-    });
+const allQuery = async (sql, params = []) => {
+    const client = await pool.connect();
+    try {
+        const result = await client.query(sql, params);
+        return result.rows;
+    } finally {
+        client.release();
+    }
 };
 
+const transaction = async (callback) => {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        const result = await callback(client);
+        await client.query('COMMIT');
+        return result;
+    } catch (error) {
+        await client.query('ROLLBACK');
+        throw error;
+    } finally {
+        client.release();
+    }
+};
+
+// ===== QUAN TRỌNG: Export đúng tên =====
 module.exports = {
-    db,
+    pool,
     runQuery,
     getQuery,
     allQuery,
+    transaction,
 };
