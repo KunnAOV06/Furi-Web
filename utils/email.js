@@ -1,3 +1,4 @@
+// utils/email.js
 const nodemailer = require('nodemailer');
 const config = require('../config');
 
@@ -33,20 +34,20 @@ const sendEmailOTP = async (toEmail, otpCode, username) => {
                     🔒 Không chia sẻ mã này với bất kỳ ai
                 </p>
                 <div style="text-align: center; color: #555577; font-size: 12px; margin-top: 20px; border-top: 1px solid #2a2a3a; padding-top: 15px;">
-                    <p>© 2024 FURI WEB — Premium Mod Store</p>
+                    <p>© 2024 FURI WEB — Mod Store</p>
                 </div>
             </div>
         </body>
         </html>
         `;
-        
+
         await transporter.sendMail({
             from: `"FURI WEB" <${config.email.user}>`,
             to: toEmail,
             subject: '[FURI WEB] Mã xác minh đặt lại mật khẩu',
             html,
         });
-        
+
         return true;
     } catch (error) {
         console.error('Lỗi gửi email:', error);
