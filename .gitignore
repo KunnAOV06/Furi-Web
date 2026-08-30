@@ -1,9 +1,0 @@
-__pycache__/
-instance/
-*.db
-*.db-journal
-*.pyc
-uploads/
-demo_files/
-thumbnails/
-.env
