@@ -1,5 +1,4 @@
-const jwt = require('jsonwebtoken');
-const config = require('../config');
+// middleware/auth.js
 const User = require('../models/User');
 
 // Middleware kiểm tra đăng nhập
@@ -11,14 +10,16 @@ const isAuthenticated = async (req, res, next) => {
             return next();
         }
     }
-    res.redirect('/login');
+    // SỬA: Đường dẫn đúng
+    req.flash('error', 'Vui lòng đăng nhập');
+    res.redirect('/auth/login');
 };
 
 // Middleware kiểm tra Admin
 const isAdmin = async (req, res, next) => {
     if (!req.user) {
         req.flash('error', 'Vui lòng đăng nhập');
-        return res.redirect('/login');
+        return res.redirect('/auth/login');
     }
     if (!req.user.is_admin) {
         req.flash('error', 'Bạn không có quyền truy cập');
@@ -31,7 +32,7 @@ const isAdmin = async (req, res, next) => {
 const isSeller = async (req, res, next) => {
     if (!req.user) {
         req.flash('error', 'Vui lòng đăng nhập');
-        return res.redirect('/login');
+        return res.redirect('/auth/login');
     }
     if (!req.user.is_seller && !req.user.is_admin) {
         req.flash('error', 'Bạn cần được cấp quyền bán hàng');
